@@ -3,7 +3,7 @@
 from collections.abc import Iterable
 
 import pandas as pd
-from sklearn.base import BaseEstimator
+from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.compose import ColumnTransformer, make_column_selector
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
@@ -47,11 +47,17 @@ def build_preprocessor() -> ColumnTransformer:
     )
 
 
-def build_model_pipeline(estimator: BaseEstimator) -> Pipeline:
-    """Attach an estimator after leakage-safe preprocessing."""
-    return Pipeline(
-        steps=[
-            ("preprocessor", build_preprocessor()),
-            ("model", estimator),
-        ]
-    )
+def build_model_pipeline(
+    estimator: BaseEstimator,
+    feature_engineer: TransformerMixin | None = None,
+    feature_selector: TransformerMixin | None = None,
+) -> Pipeline:
+    """Build feature engineering, logical selection, preprocessing, and model."""
+    steps = []
+    if feature_engineer is not None:
+        steps.append(("feature_engineering", feature_engineer))
+    if feature_selector is not None:
+        steps.append(("feature_selection", feature_selector))
+    steps.append(("preprocessor", build_preprocessor()))
+    steps.append(("model", estimator))
+    return Pipeline(steps=steps)
