@@ -106,3 +106,47 @@ class LogicalFeatureSelector(TransformerMixin, BaseEstimator):
             raise TypeError("LogicalFeatureSelector requires a pandas DataFrame.")
         if X.empty:
             raise ValueError("LogicalFeatureSelector received an empty DataFrame.")
+
+
+class FixedFeatureSelector(TransformerMixin, BaseEstimator):
+    """Select a fixed list of logical features chosen in an earlier phase."""
+
+    def __init__(self, features):
+        self.features = features
+
+    def fit(self, X: pd.DataFrame, y=None):
+        """Validate that every frozen feature can be produced from the input."""
+        self._validate_input(X)
+        missing = set(self.features).difference(X.columns)
+        if missing:
+            raise ValueError(f"Input is missing frozen features: {sorted(missing)}")
+        self.feature_names_in_ = np.asarray(X.columns, dtype=object)
+        self.selected_features_ = np.asarray(self.features, dtype=object)
+        self.support_ = np.isin(self.feature_names_in_, self.selected_features_)
+        return self
+
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Return the frozen logical features in their saved order."""
+        check_is_fitted(self, "selected_features_")
+        self._validate_input(X)
+        missing = set(self.selected_features_).difference(X.columns)
+        if missing:
+            raise ValueError(f"Input is missing frozen features: {sorted(missing)}")
+        return X.loc[:, self.selected_features_].copy()
+
+    def get_support(self) -> np.ndarray:
+        """Return a mask aligned with the columns seen during ``fit``."""
+        check_is_fitted(self, "support_")
+        return self.support_.copy()
+
+    def get_feature_names_out(self, input_features=None) -> np.ndarray:
+        """Return the frozen logical feature names."""
+        check_is_fitted(self, "selected_features_")
+        return self.selected_features_.copy()
+
+    @staticmethod
+    def _validate_input(X: pd.DataFrame) -> None:
+        if not isinstance(X, pd.DataFrame):
+            raise TypeError("FixedFeatureSelector requires a pandas DataFrame.")
+        if X.empty:
+            raise ValueError("FixedFeatureSelector received an empty DataFrame.")

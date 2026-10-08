@@ -11,7 +11,10 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 
 def split_features_target(
-        frame: pd.DataFrame, target: str = "stroke", drop_columns: Iterable[str] = ("id",),) -> tuple[pd.DataFrame, pd.Series]:
+    frame: pd.DataFrame,
+    target: str = "stroke",
+    drop_columns: Iterable[str] = ("id",),
+) -> tuple[pd.DataFrame, pd.Series]:
     """Return features and target while excluding identifier columns."""
     if target not in frame.columns:
         raise KeyError(f"Target column '{target}' was not found.")
@@ -33,14 +36,22 @@ def build_preprocessor() -> ColumnTransformer:
     categorical_pipeline = Pipeline(
         steps=[
             ("imputer", SimpleImputer(strategy="most_frequent")),
-            ("one_hot", OneHotEncoder(handle_unknown="ignore", sparse_output=True)),
+            ("one_hot", OneHotEncoder(handle_unknown="ignore", sparse_output=False)),
         ]
     )
 
     return ColumnTransformer(
         transformers=[
-            ("numeric", numeric_pipeline, make_column_selector(dtype_include="number")),
-            ("categorical", categorical_pipeline, make_column_selector(dtype_exclude="number")),
+            (
+                "numeric",
+                numeric_pipeline,
+                make_column_selector(dtype_include="number"),
+            ),
+            (
+                "categorical",
+                categorical_pipeline,
+                make_column_selector(dtype_exclude="number"),
+            ),
         ],
         remainder="drop",
         verbose_feature_names_out=False,

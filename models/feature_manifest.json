@@ -1,0 +1,120 @@
+{
+  "selection_method": "mutual_information_with_cv_feature_count",
+  "selected_feature_count": 8,
+  "selected_logical_features": [
+    "age",
+    "ever_married",
+    "bmi",
+    "age_squared",
+    "bmi_squared",
+    "age_glucose_interaction",
+    "bmi_glucose_interaction",
+    "comorbidity_count"
+  ],
+  "required_raw_features": [
+    "age",
+    "hypertension",
+    "heart_disease",
+    "ever_married",
+    "avg_glucose_level",
+    "bmi"
+  ],
+  "feature_scores": [
+    {
+      "feature": "age",
+      "origin": "original",
+      "mi_score": 0.04263864092698255,
+      "selected": true
+    },
+    {
+      "feature": "age_squared",
+      "origin": "engineered",
+      "mi_score": 0.040877011742041836,
+      "selected": true
+    },
+    {
+      "feature": "age_glucose_interaction",
+      "origin": "engineered",
+      "mi_score": 0.027025258801003593,
+      "selected": true
+    },
+    {
+      "feature": "bmi_glucose_interaction",
+      "origin": "engineered",
+      "mi_score": 0.016590233779837815,
+      "selected": true
+    },
+    {
+      "feature": "bmi",
+      "origin": "original",
+      "mi_score": 0.010728734370939241,
+      "selected": true
+    },
+    {
+      "feature": "comorbidity_count",
+      "origin": "engineered",
+      "mi_score": 0.010611972024196399,
+      "selected": true
+    },
+    {
+      "feature": "bmi_squared",
+      "origin": "engineered",
+      "mi_score": 0.007999732608241272,
+      "selected": true
+    },
+    {
+      "feature": "ever_married",
+      "origin": "original",
+      "mi_score": 0.007677112315520096,
+      "selected": true
+    },
+    {
+      "feature": "work_type",
+      "origin": "original",
+      "mi_score": 0.0074932499647911805,
+      "selected": false
+    },
+    {
+      "feature": "heart_disease",
+      "origin": "original",
+      "mi_score": 0.006403208477040893,
+      "selected": false
+    },
+    {
+      "feature": "avg_glucose_level",
+      "origin": "original",
+      "mi_score": 0.005794456268184867,
+      "selected": false
+    },
+    {
+      "feature": "avg_glucose_log1p",
+      "origin": "engineered",
+      "mi_score": 0.005433940720048991,
+      "selected": false
+    },
+    {
+      "feature": "hypertension",
+      "origin": "original",
+      "mi_score": 0.005332508540293553,
+      "selected": false
+    },
+    {
+      "feature": "smoking_status",
+      "origin": "original",
+      "mi_score": 0.002506000206134347,
+      "selected": false
+    },
+    {
+      "feature": "gender",
+      "origin": "original",
+      "mi_score": 1.862652450259749e-05,
+      "selected": false
+    },
+    {
+      "feature": "residence_type",
+      "origin": "original",
+      "mi_score": 1.779061089994538e-05,
+      "selected": false
+    }
+  ]
+}
