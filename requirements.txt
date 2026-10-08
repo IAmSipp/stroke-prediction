@@ -1,4 +1,9 @@
 ipykernel
 jupyterlab
 kaggle
+matplotlib
+numpy
+pandas
+scikit-learn
+seaborn
 
