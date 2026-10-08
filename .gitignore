@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Environment variables and credentials
+.env
+.kaggle/
+kaggle.json
+access_token
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Project data (keep only the directory structure in Git)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
