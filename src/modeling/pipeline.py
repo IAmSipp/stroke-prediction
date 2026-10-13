@@ -1,5 +1,3 @@
-"""Leakage-safe preprocessing and model pipeline builders."""
-
 from collections.abc import Iterable
 
 import pandas as pd
@@ -15,7 +13,6 @@ def split_features_target(
     target: str = "stroke",
     drop_columns: Iterable[str] = ("id",),
 ) -> tuple[pd.DataFrame, pd.Series]:
-    """Return features and target while excluding identifier columns."""
     if target not in frame.columns:
         raise KeyError(f"Target column '{target}' was not found.")
 
@@ -26,7 +23,6 @@ def split_features_target(
 
 
 def build_preprocessor() -> ColumnTransformer:
-    """Build preprocessing that learns all statistics during ``fit`` only."""
     numeric_pipeline = Pipeline(
         steps=[
             ("imputer", SimpleImputer(strategy="median", add_indicator=True)),
@@ -63,7 +59,6 @@ def build_model_pipeline(
     feature_engineer: TransformerMixin | None = None,
     feature_selector: TransformerMixin | None = None,
 ) -> Pipeline:
-    """Build feature engineering, logical selection, preprocessing, and model."""
     steps = []
     if feature_engineer is not None:
         steps.append(("feature_engineering", feature_engineer))

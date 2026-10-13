@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stroke Prediction</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <span class="eyebrow">MACHINE LEARNING PROJECT</span>
+      <h1>Stroke Prediction<span>ทดลองประเมินข้อมูลสุขภาพ</span></h1>
+      <p>กรอกข้อมูลเพื่อดูผลจากโมเดลที่เรียนรู้จากชุดข้อมูล Stroke Prediction</p>
+      <p class="notice">ต้นแบบเพื่อการศึกษา ใช้จำแนกข้อมูล ไม่ใช่เครื่องมือวินิจฉัยโรคหรือทำนายความเสี่ยงทางการแพทย์</p>
+    </header>
+    <div class="layout">
+      <section class="card">
+        <div class="card-heading"><h2>ข้อมูลสำหรับประเมิน</h2><span class="local">ทำงานในเบราว์เซอร์</span></div>
+        <p class="muted">กรอกเฉพาะข้อมูลที่โมเดลใช้ ช่อง BMI เว้นว่างได้</p>
+        <div class="examples" aria-label="ข้อมูลตัวอย่าง">
+          <span>ลองตัวอย่าง</span>
+          <button type="button" data-example="a" disabled>ตัวอย่าง A</button>
+          <button type="button" data-example="b" disabled>ตัวอย่าง B</button>
+          <button type="button" data-example="missing" disabled>ไม่มีค่า BMI</button>
+        </div>
+        <form>
+          <div class="fields">
+            <div data-feature="age"><label for="age">อายุ <small>ปี</small></label><input id="age" name="age" type="number" min="0" max="120" step="any" value="55" required></div>
+            <div data-feature="avg_glucose_level"><label for="avg_glucose_level">ระดับกลูโคสเฉลี่ย <small>mg/dL</small></label><input id="avg_glucose_level" name="avg_glucose_level" type="number" min="0.01" max="1000" step="any" value="100" required></div>
+            <div data-feature="bmi"><label for="bmi">BMI <small>kg/m² · ไม่บังคับ</small></label><input id="bmi" name="bmi" type="number" min="0.01" max="100" step="any" value="26" placeholder="เว้นว่างหากไม่ทราบ"></div>
+            <div data-feature="ever_married"><label for="ever_married">เคยสมรสหรือไม่</label><select id="ever_married" name="ever_married"><option value="Yes">เคย</option><option value="No">ไม่เคย</option></select></div>
+            <div data-feature="hypertension"><label for="hypertension">มีภาวะความดันโลหิตสูง</label><select id="hypertension" name="hypertension"><option value="0">ไม่มี</option><option value="1">มี</option></select></div>
+            <div data-feature="heart_disease"><label for="heart_disease">มีโรคหัวใจ</label><select id="heart_disease" name="heart_disease"><option value="0">ไม่มี</option><option value="1">มี</option></select></div>
+            <div data-feature="gender"><label for="gender">เพศตามชุดข้อมูล</label><select id="gender" name="gender"><option value="Female">หญิง</option><option value="Male">ชาย</option><option value="Other">อื่น ๆ</option></select></div>
+            <div data-feature="work_type"><label for="work_type">ประเภทการทำงาน</label><select id="work_type" name="work_type"><option value="Private">เอกชน</option><option value="Self-employed">อาชีพอิสระ</option><option value="Govt_job">ภาครัฐ</option><option value="children">เด็ก</option><option value="Never_worked">ไม่เคยทำงาน</option></select></div>
+            <div data-feature="residence_type"><label for="residence_type">พื้นที่อยู่อาศัย</label><select id="residence_type" name="residence_type"><option value="Urban">ในเมือง</option><option value="Rural">ชนบท</option></select></div>
+            <div data-feature="smoking_status"><label for="smoking_status">ประวัติการสูบบุหรี่</label><select id="smoking_status" name="smoking_status"><option value="never smoked">ไม่เคยสูบ</option><option value="formerly smoked">เคยสูบ</option><option value="smokes">สูบอยู่</option><option value="Unknown">ไม่ทราบ</option></select></div>
+          </div>
+          <button id="predict" class="primary" type="submit" disabled>ประเมินข้อมูล <span aria-hidden="true">→</span></button>
+          <p id="status" class="status" role="status">กำลังโหลดโมเดล…</p>
+        </form>
+      </section>
+      <aside>
+        <section id="result" class="card result" aria-live="polite" hidden>
+          <span class="eyebrow">ผลการประเมิน</span>
+          <h2 id="classification"></h2>
+          <p id="result-description" class="muted"></p>
+          <div class="score"><strong id="score"></strong><span>/ 100</span></div>
+          <div class="bar"><div id="score-bar"></div></div>
+          <p class="score-label">คะแนนจากโมเดล</p>
+          <p class="muted">คะแนนนี้ไม่ใช่เปอร์เซ็นต์โอกาสเกิดโรค และผล non-stroke ไม่ได้ยืนยันว่าไม่มีโรค</p>
+        </section>
+        <section class="card about">
+          <h2>เกี่ยวกับโมเดล</h2>
+          <p>โมเดล: <strong id="model-name">กำลังโหลด…</strong></p>
+          <p class="muted">เลือกโมเดลด้วย 5-fold cross-validation และเลือกจุดตัดจาก validation โดยตั้งเป้า recall อย่างน้อย 80%</p>
+          <div class="metrics">
+            <div><strong id="test-recall">—</strong><span>Test recall</span></div>
+            <div><strong id="test-precision">—</strong><span>Test precision</span></div>
+            <div><strong id="test-ap">—</strong><span>Test PR-AUC (AP)</span></div>
+          </div>
+          <p class="muted compact">ประเมินบน test <span id="test-count">—</span> แถว · จุดตัด <span id="threshold">—</span></p>
+          <p class="muted compact">โมเดลอาจจำแนกผิดทั้งสองกลุ่ม โดยเฉพาะเมื่อ precision ต่ำ ผลนี้ควรใช้สาธิตการทำงานของ ML เท่านั้น</p>
+        </section>
+      </aside>
+    </div>
+    <footer>ข้อมูลต้นทาง: <a href="https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset" target="_blank" rel="noopener noreferrer">Stroke Prediction Dataset</a> · ข้อมูลที่กรอกไม่ถูกบันทึกหรือส่งไปยังเซิร์ฟเวอร์</footer>
+  </main>
+</body>
+</html>

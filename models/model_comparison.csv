@@ -1,0 +1,3 @@
+model,cv_pr_auc,cv_pr_auc_std,cv_train_pr_auc,cv_roc_auc,best_parameters
+random_forest,0.23162460218835007,0.06316921626873069,0.5884254158682408,0.8400314601611569,"{'model__n_estimators': 200, 'model__min_samples_leaf': 10, 'model__max_features': 'sqrt', 'model__max_depth': None, 'feature_selection__k': 10}"
+logistic_regression,0.21304321977622104,0.015787815156785418,0.2167713583995011,0.8520339959772455,{'model__C': 0.01}

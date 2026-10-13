@@ -1,5 +1,3 @@
-"""Simple feature engineering for the stroke-prediction dataset."""
-
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -19,7 +17,6 @@ def get_required_raw_features(
     selected_features,
     original_feature_order,
 ) -> list[str]:
-    """Resolve selected logical features to the raw inputs needed to build them."""
     required = set()
     for feature in selected_features:
         dependencies = ENGINEERED_FEATURE_DEPENDENCIES.get(feature)
@@ -32,15 +29,14 @@ def get_required_raw_features(
 
 
 class StrokeFeatureEngineer(TransformerMixin, BaseEstimator):
-    """Create candidate features from the original clinical variables."""
 
     def fit(self, X: pd.DataFrame, y=None):
-        """Validate input; this transformer does not learn any statistics."""
         self._validate_input(X)
+        self.feature_names_in_ = np.asarray(X.columns, dtype=object)
+        self.n_features_in_ = X.shape[1]
         return self
 
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
-        """Return a copy of ``X`` with candidate features appended."""
         self._validate_input(X)
         frame = X.copy()
 
@@ -73,7 +69,7 @@ class StrokeFeatureEngineer(TransformerMixin, BaseEstimator):
         if risk_columns:
             frame["comorbidity_count"] = frame[risk_columns].sum(
                 axis=1,
-                min_count=1,
+                min_count=len(risk_columns),
             )
 
         return frame

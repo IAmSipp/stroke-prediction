@@ -1,14 +1,26 @@
 {
   "model_name": "random_forest",
+  "task": "binary_classification",
+  "target": "stroke",
+  "labels": {
+    "0": "no stroke",
+    "1": "stroke"
+  },
   "selection_metric": "average_precision (PR-AUC)",
-  "train_cv_pr_auc": 0.25176837872468305,
-  "validation_pr_auc": 0.25079203823611484,
-  "validation_roc_auc": 0.8453268082897712,
-  "threshold": 0.5531322381833194,
-  "threshold_reason": "highest precision with recall >= 80%",
+  "train_cv_pr_auc": 0.23162460218835007,
+  "train_cv_pr_auc_std": 0.06316921626873069,
+  "validation_pr_auc": 0.267957393310515,
+  "validation_roc_auc": 0.8500722945167389,
+  "threshold": 0.40211028377095137,
+  "threshold_reason": "highest validation precision with recall >= 80%",
+  "training_rows": 3577,
+  "validation_rows": 766,
+  "refit_on_validation": false,
   "selected_logical_features": [
     "age",
+    "heart_disease",
     "ever_married",
+    "work_type",
     "bmi",
     "age_squared",
     "bmi_squared",
@@ -21,14 +33,20 @@
     "hypertension",
     "heart_disease",
     "ever_married",
+    "work_type",
     "avg_glucose_level",
     "bmi"
   ],
   "best_parameters": {
     "model__n_estimators": 200,
-    "model__min_samples_leaf": 5,
+    "model__min_samples_leaf": 10,
     "model__max_features": "sqrt",
-    "model__max_depth": 4,
-    "model__class_weight": "balanced"
+    "model__max_depth": null,
+    "feature_selection__k": 10
+  },
+  "sklearn_version": "1.9.0",
+  "split_sha256": {
+    "train": "646fbf29392181686f54f254e13b644ae5776949bbed740f9d2d1e75bd8962cf",
+    "validation": "1703d6978ededc36e1a4cb36844cec1ab871b1389f7c5e056853d6da65f8099d"
   }
 }
